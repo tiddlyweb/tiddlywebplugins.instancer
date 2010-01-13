@@ -1,7 +1,7 @@
 import sys
 import os
 
-from urllib2 import urlopen, quote, URLError
+from urllib2 import urlopen, URLError
 from pkg_resources import resource_filename
 
 from tiddlyweb.util import write_utf8_file, std_error_message
