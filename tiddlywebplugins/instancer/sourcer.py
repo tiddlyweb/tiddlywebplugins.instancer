@@ -8,7 +8,7 @@ supports .tiddler, .tid, .js and .recipe files
 
 import os
 
-from urllib2 import urlopen, unquote, URLError, HTTPError
+from urllib2 import urlopen, quote, unquote, URLError, HTTPError
 
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.serializer import Serializer
