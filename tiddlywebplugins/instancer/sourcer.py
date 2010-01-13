@@ -122,6 +122,10 @@ def _expand_recipe(uri): # XXX: adapted from devstore
 	uris = []
 	for rule in rules:
 		type, uri = rule.split(": ")
+		if not (uri.startswith("http:") or uri.startswith("https:")):
+			if not "%" in uri:
+				uri = quote(uri)
+
 		uri = os.path.join(base_dir, uri)
 		if type == "recipe":
 			uris = uris + _expand_recipe(uri)
