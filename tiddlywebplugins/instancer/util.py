@@ -7,7 +7,8 @@ from pkg_resources import resource_filename
 from tiddlyweb.util import write_utf8_file, std_error_message
 
 from tiddlywebplugins.instancer import Instance
-from tiddlywebplugins.instancer.sourcer import _expand_recipe
+
+from tiddlywebplugins.twimport import recipe_to_urls
 
 
 def spawn(instance_path, init_config, instance_module):
@@ -77,7 +78,7 @@ def cache_tiddlers(package_name):
         sources[bag] = []
         for uri in uris:
             if uri.endswith(".recipe"):
-                urls = _expand_recipe(uri)
+                urls = recipe_to_urls(uri)
                 sources[bag].extend(urls)
             else:
                 sources[bag].append(uri)
