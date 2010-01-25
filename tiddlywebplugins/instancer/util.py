@@ -106,7 +106,7 @@ def cache_tiddlers(package_name):
         for uri in uris:
             filepath = os.path.join(bag_path, os.path.basename(uri))
             std_error_message("retrieving %s" % uri)
-            try:
+            try: # XXX: duplication of tiddlywebplugins.twimport._get_url_handle
                 try:
                     content = urlopen(uri).read()
                 except URLError:
@@ -114,7 +114,6 @@ def cache_tiddlers(package_name):
                     path = quote(path)
                     uri = urlparse.urlunparse((scheme, netloc, path, params, query, fragment))
                     content = urlopen(uri).read()
-
             except URLError:
                 if uri.endswith(".meta"):
                     std_error_message("no meta file found for %s" % uri[:-5])

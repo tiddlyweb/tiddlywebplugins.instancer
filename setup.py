@@ -3,7 +3,7 @@ import os
 from setuptools import setup, find_packages
 
 
-VERSION = "0.7.0" # N.B.: duplicate of tiddlywebplugins.instancer.__init__
+VERSION = "0.7.1" # N.B.: duplicate of tiddlywebplugins.instancer.__init__
 
 
 setup(
