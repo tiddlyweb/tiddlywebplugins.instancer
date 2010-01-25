@@ -20,6 +20,6 @@ setup(
     install_requires = ["setuptools",
         "tiddlyweb>=0.9.83",
         "tiddlywebplugins.utils",
-        "tiddlywebplugins.twimport"],
+        "tiddlywebplugins.twimport>=0.5"],
     zip_safe = False
 )
