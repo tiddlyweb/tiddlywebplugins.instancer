@@ -149,14 +149,14 @@ def _generate_secret():
     return digest.hexdigest()
 
 
-def _pretty_print(dic): # XXX: list items use single quotes, thus creating inconsistencies
+def _pretty_print(dic):
     """
     generate an indented string representation of a dictionary
     """
     def escape_strings(value):
         if hasattr(value, "join"): # XXX: checking for join method hacky!?
-            return '"%s"' % value
+            return "'%s'" % value
         else:
             return value
-    lines = ('\t"%s": %s' % (k, escape_strings(v)) for k, v in dic.items())
+    lines = ("    '%s': %s" % (k, escape_strings(v)) for k, v in dic.items())
     return "{\n%s,\n}" % ",\n".join(lines)
