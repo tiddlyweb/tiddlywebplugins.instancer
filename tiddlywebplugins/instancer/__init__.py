@@ -149,7 +149,7 @@ def _generate_secret():
     return digest.hexdigest()
 
 
-def _pretty_print(dic): # TODO: use pprint? -- XXX: list items use single quotes, thus creating inconsistencies
+def _pretty_print(dic): # XXX: list items use single quotes, thus creating inconsistencies
     """
     generate an indented string representation of a dictionary
     """
@@ -159,4 +159,4 @@ def _pretty_print(dic): # TODO: use pprint? -- XXX: list items use single quotes
         else:
             return value
     lines = ('\t"%s": %s' % (k, escape_strings(v)) for k, v in dic.items())
-    return "{\n%s\n}" % ",\n".join(lines)
+    return "{\n%s,\n}" % ",\n".join(lines)
