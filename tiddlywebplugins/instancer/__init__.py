@@ -8,6 +8,7 @@ import tiddlywebplugins.instancer.sourcer
 
 from time import time
 from random import random
+from pprint import pformat
 
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.recipe import Recipe
@@ -121,7 +122,7 @@ class Instance(object):
         }
         config.update(self.instance_config or {})
 
-        config_string = "config = %s\n" % _pretty_print(config)
+        config_string = "config = %s\n" % _pretty_format(config)
         f = open(CONFIG_NAME, "w")
         f.write("%s\n%s" % (intro, config_string))
         f.close()
@@ -149,13 +150,15 @@ def _generate_secret():
     return digest.hexdigest()
 
 
-def _pretty_print(dic):
+def _pretty_format(dic):
     """
     generate an indented string representation of a dictionary
     """
     def escape_strings(value):
-        if hasattr(value, "join"): # XXX: checking for join method hacky!?
+        if hasattr(value, "join"):
             return "'%s'" % value
+        elif hasattr(value, "keys"):
+            return pformat(value)
         else:
             return value
     lines = ("    '%s': %s" % (k, escape_strings(v)) for k, v in dic.items())
