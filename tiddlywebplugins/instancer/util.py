@@ -5,13 +5,17 @@ import urlparse
 
 from urllib import quote
 from urllib2 import urlopen, URLError
-from pkg_resources import resource_filename
 
 from tiddlyweb.util import write_utf8_file, std_error_message
 
 from tiddlywebplugins.instancer import Instance
 
 from tiddlywebplugins.twimport import recipe_to_urls
+
+try:
+    from pkg_resources import resource_filename
+except ImportError:
+    from tiddlywebplugins.utils import resource_filename
 
 
 def spawn(instance_path, init_config, instance_module):
