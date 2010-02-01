@@ -19,7 +19,7 @@ setup(
     packages = find_packages(exclude=["test"]),
     install_requires = ["setuptools",
         "tiddlyweb>=0.9.83",
-        "tiddlywebplugins.utils>=0.13",
+        "tiddlywebplugins.utils>=0.15",
         "tiddlywebplugins.twimport>=0.5"],
     zip_safe = False
 )
