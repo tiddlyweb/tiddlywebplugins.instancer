@@ -3,7 +3,7 @@ import os
 
 import urlparse
 
-from urllib import quote # for Python 2.4 compatibility
+from urllib import quote
 from urllib2 import urlopen, URLError
 from pkg_resources import resource_filename
 
