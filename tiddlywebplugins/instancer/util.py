@@ -75,8 +75,8 @@ def cache_tiddlers(package_name):
     tiddler files are stored in <package>/resources/<bag>
     a complete index is stored in <package>/resources
     """
-    instance_module = __import__("%s.instance" % package_name,
-        fromlist=["instance"]) # XXX: unnecessarily convoluted and constraining!?
+    instance_module = __import__("%s.instance" % package_name, None, None,
+        ["instance"]) # XXX: unnecessarily convoluted and constraining!?
     store_contents = instance_module.store_contents
     package_path = os.path.join(*package_name.split("."))
 
