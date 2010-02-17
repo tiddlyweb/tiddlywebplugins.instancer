@@ -114,14 +114,14 @@ def cache_tiddlers(package_name):
             try: # XXX: duplication of tiddlywebplugins.twimport._get_url_handle
                 try:
                     content = urlopen(uri).read()
-                except URLError:
+                except (URLError, OSError):
                     scheme, netloc, path, params, query, fragment = urlparse.urlparse(uri)
                     path = quote(path)
                     uri = urlparse.urlunparse((scheme, netloc, path, params, query, fragment))
                     content = urlopen(uri).read()
                 content = unicode(content, "utf-8")
                 write_utf8_file(filepath, content)
-            except URLError:
+            except (URLError, OSError):
                 if uri.endswith(".meta"):
                     std_error_message("no meta file found for %s" % uri[:-5])
                 else:
