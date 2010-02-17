@@ -18,7 +18,7 @@ from tiddlyweb.util import sha
 from tiddlywebplugins.utils import get_store
 
 
-__version__ = "0.7.9"
+__version__ = "0.7.10"
 
 CONFIG_NAME = "tiddlywebconfig.py"
 
@@ -102,6 +102,9 @@ class Instance(object):
         for name, data in users.items():
             note = data.get("note")
             user = User(name, note=note)
+            password = data.get("_password")
+            if password:
+                user.set_password(password)
             for role in data.get("roles"):
                 user.add_role(role)
             store.put(user)
