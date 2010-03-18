@@ -1,4 +1,4 @@
-.PHONY: test dist release
+.PHONY: clean test dist release pypi
 
 clean:
 	find . -name "*.pyc" | xargs rm || true
@@ -7,10 +7,10 @@ clean:
 test:
 	py.test -x test
 
-dist: test
+dist: clean test
 	python setup.py sdist
 
-release: clean test pypi
+release: dist pypi
 
 pypi: test
 	python setup.py sdist upload

@@ -52,7 +52,8 @@ def get_tiddler_locations(store_contents, package_name):
         for line in f:
             bag, filename = line.rstrip().split("/", 1)
             filepath = os.path.join("resources", bag, filename)
-            uri = "file://%s" % resource_filename(package_name, filepath)
+            uri = "file:///%s" % resource_filename(package_name, filepath)
+            uri = uri.replace("\\", "/") # convert Windows paths to URIs
             if filename.endswith(".js"): # unpack meta files into egg cache
                 resource_filename(package_name, "%s.meta" % filepath)
             try:
