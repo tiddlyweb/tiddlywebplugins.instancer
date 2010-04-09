@@ -3,7 +3,7 @@ import os
 from setuptools import setup, find_packages
 
 
-VERSION = "0.7.12" # N.B.: duplicate of tiddlywebplugins.instancer.__init__
+VERSION = "0.7.13" # N.B.: duplicate of tiddlywebplugins.instancer.__init__
 
 
 setup(
@@ -18,8 +18,8 @@ setup(
     namespace_packages = ["tiddlywebplugins"],
     packages = find_packages(exclude=["test"]),
     install_requires = ["setuptools",
-        "tiddlyweb>=0.9.83",
-        "tiddlywebplugins.utils>=0.15",
-        "tiddlywebplugins.twimport>=0.5"],
+        "tiddlyweb>=1.0.0",
+        "tiddlywebplugins.utils>=1.0",
+        "tiddlywebplugins.twimport>=0.9.4"],
     zip_safe = False
 )
