@@ -124,8 +124,13 @@ def cache_tiddlers(package_name):
                     path = quote(path)
                     uri = urlparse.urlunparse((scheme, netloc, path, params, query, fragment))
                     content = urlopen(uri).read()
-                content = unicode(content, "utf-8")
-                write_utf8_file(filepath, content)
+                try:
+                    content = unicode(content, "utf-8")
+                    write_utf8_file(filepath, content)
+                except UnicodeDecodeError: # assume binary
+                    f = open(filepath, "wb")
+                    f.write(content)
+                    f.close()
             except (URLError, OSError):
                 if uri.endswith(".meta"):
                     std_error_message("no meta file found for %s" % uri[:-5])
