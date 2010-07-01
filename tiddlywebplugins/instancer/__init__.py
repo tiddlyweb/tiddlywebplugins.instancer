@@ -66,7 +66,7 @@ class Instance(object):
         store = get_store(self.init_config)
         for bag, uris in self.init_config["instance_tiddlers"].items():
             for tiddler in sourcer.from_list(uris):
-                tiddler.bag = bag
+                tiddler.bag = unicode(bag)
                 store.put(tiddler)
 
     def _init_store(self, struct):
