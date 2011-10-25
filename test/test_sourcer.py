@@ -92,7 +92,7 @@ def test_one_plugin():
     tiddler = from_list([uri])[0]
 
     assert tiddler.title == "BarPlugin"
-    assert tiddler.tags == ["foo", "bar baz", "..."]
+    assert sorted(tiddler.tags) == sorted([u"foo", u"bar baz", u"..."])
     assert tiddler.text == 'alert("bar");'
 
 
@@ -108,7 +108,7 @@ def test_one_tid():
     tiddler = from_list([uri])[0]
 
     assert tiddler.title == "Bar"
-    assert tiddler.tags == ["foo", "bar baz", "..."]
+    assert sorted(tiddler.tags) == sorted(["foo", "bar baz", "..."])
     assert tiddler.text == "lorem ipsum\nbar\ndolor sit amet"
 
     uri = "%s/alpha/tiddlers/common.tid" % REPO_URI
@@ -131,12 +131,12 @@ def test_another_tiddler():
     tiddler = from_list([uri])[0]
 
     assert tiddler.title == "Lorem"
-    assert tiddler.tags == ["foo", "bar baz"]
+    assert sorted(tiddler.tags) == sorted(["foo", "bar baz"])
     assert tiddler.text == "lorem ipsum\ndolor sit amet"
 
     uri = "%s/bravo/tiddlers/ipsum.tiddler" % REPO_URI
     tiddler = from_list([uri])[0]
 
     assert tiddler.title == "Ipsum"
-    assert tiddler.tags == ["foo", "bar baz", "..."]
+    assert sorted(tiddler.tags) == sorted(["foo", "bar baz", "..."])
     assert tiddler.text == "lorem ipsum\ndolor sit amet"
