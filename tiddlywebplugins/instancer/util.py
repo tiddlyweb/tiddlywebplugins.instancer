@@ -58,8 +58,7 @@ def get_tiddler_locations(store_contents, package_name):
                 uri = "file:///%s" % filepath.replace("\\", "/")
             except AttributeError:
                 uri = "file://%s" % filepath
-            if filename.endswith(".js"): # unpack meta files into egg cache
-                resource_filename(package_name, "%s.meta" % filepath)
+            resource_filename(package_name, "%s.meta" % filepath)
             try:
                 instance_tiddlers[bag].append(uri)
             except KeyError:
@@ -96,8 +95,7 @@ def cache_tiddlers(package_name):
                 sources[bag].append(uri)
         metas = []
         for uri in sources[bag]:
-            if uri.endswith(".js"):
-                metas.append("%s.meta" % uri)
+            metas.append("%s.meta" % uri)
         sources[bag].extend(metas)
 
     resources_path = os.path.join(package_path, "resources")
