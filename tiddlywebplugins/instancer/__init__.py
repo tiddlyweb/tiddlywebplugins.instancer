@@ -10,6 +10,7 @@ from time import time
 from random import random
 from pprint import pformat
 
+from tiddlyweb.manage import make_command
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.recipe import Recipe
 from tiddlyweb.model.user import User
@@ -166,3 +167,14 @@ def _pretty_format(dic):
             return value
     lines = ("    '%s': %s" % (k, escape_strings(v)) for k, v in dic.items())
     return "{\n%s,\n}" % ",\n".join(lines)
+
+
+def init(config):
+    """
+    Establish the update command.
+    """
+    @make_command()
+    def update(args):
+        """Update all instance_tiddlers in the current instance."""
+        instance = Instance('.', config)
+        instance.update_store()
