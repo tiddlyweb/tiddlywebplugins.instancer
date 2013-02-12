@@ -14,6 +14,7 @@ from tiddlyweb.manage import make_command
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.recipe import Recipe
 from tiddlyweb.model.user import User
+from tiddlyweb.store import Store
 from tiddlyweb.util import sha
 
 from tiddlywebplugins.utils import get_store
@@ -65,10 +66,13 @@ class Instance(object):
         os.chdir(self.root) # XXX: side-effects
 
         store = get_store(self.init_config)
-        for bag, uris in self.init_config["instance_tiddlers"].items():
-            for tiddler in sourcer.from_list(uris):
-                tiddler.bag = unicode(bag)
-                store.put(tiddler)
+        for package_name in self.init_config['instance_pkgstores']:
+            target_store = Store('tiddlywebplugins.pkgstore',
+                    {'package': package_name, 'read_only': True}, {})
+            for bag in target_store.list_bags():
+                for tiddler in target_store.list_bag_tiddlers(bag):
+                    tiddler = target_store.get(tiddler)
+                    store.put(tiddler)
 
     def _init_store(self, struct):
         """
@@ -77,10 +81,6 @@ class Instance(object):
         (no support for user passwords for security reasons)
         """
         store = get_store(self.init_config)
-
-        for bag_name in self.init_config["instance_tiddlers"]: # XXX: obsolete?
-            bag = Bag(bag_name)
-            store.put(bag)
 
         bags = struct.get("bags", {})
         for name, data in bags.items():

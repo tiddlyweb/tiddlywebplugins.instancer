@@ -6,11 +6,13 @@ import urlparse
 from urllib import quote
 from urllib2 import urlopen, URLError
 
+from tiddlyweb.model.bag import Bag
+from tiddlyweb.store import Store
 from tiddlyweb.util import write_utf8_file, std_error_message
 
 from tiddlywebplugins.instancer import Instance
 
-from tiddlywebplugins.twimport import recipe_to_urls
+from tiddlywebplugins.twimport import recipe_to_urls, url_to_tiddler
 
 try:
     from pkg_resources import resource_filename
@@ -43,31 +45,7 @@ def get_tiddler_locations(store_contents, package_name):
 
     packaged tiddlers must be listed in <package>/resources/tiddlers.index
     """
-    package_path = os.path.join(*package_name.split("."))
-    tiddler_index = os.path.join("resources", "tiddlers.index")
-    tiddler_index = resource_filename(package_name, tiddler_index)
-    instance_tiddlers = {}
-    try:
-        f = open(tiddler_index)
-        for line in f:
-            bag, filename = line.rstrip().split("/", 1)
-            filepath = os.path.join("resources", bag, filename)
-            filepath = resource_filename(package_name, filepath)
-            try: # convert Windows paths to URIs
-                sys.getwindowsversion() # XXX: safer detection than sys.platform or os.name?
-                uri = "file:///%s" % filepath.replace("\\", "/")
-            except AttributeError:
-                uri = "file://%s" % filepath
-            resource_filename(package_name, "%s.meta" % filepath)
-            try:
-                instance_tiddlers[bag].append(uri)
-            except KeyError:
-                instance_tiddlers[bag] = [uri]
-        f.close()
-    except IOError:
-        for bag, uris in store_contents.items():
-            instance_tiddlers[bag] = uris
-    return instance_tiddlers
+    raise TypeError('we no do this')
 
 
 def cache_tiddlers(package_name):
@@ -76,13 +54,14 @@ def cache_tiddlers(package_name):
 
     reads store_contents from <package>.instance
 
-    tiddler files are stored in <package>/resources/<bag>
-    a complete index is stored in <package>/resources
+    tiddler files are stored in <package>/resources
     """
     instance_module = __import__("%s.instance" % package_name, None, None,
         ["instance"]) # XXX: unnecessarily convoluted and constraining!?
     store_contents = instance_module.store_contents
-    package_path = os.path.join(*package_name.split("."))
+
+    target_store = Store('tiddlywebplugins.pkgstore',
+            {'package': package_name, 'read_only': False}, {})
 
     sources = {}
     for bag, uris in store_contents.items():
@@ -93,56 +72,13 @@ def cache_tiddlers(package_name):
                 sources[bag].extend(urls)
             else:
                 sources[bag].append(uri)
-        metas = []
-        for uri in sources[bag]:
-            metas.append("%s.meta" % uri)
-        sources[bag].extend(metas)
 
-    resources_path = os.path.join(package_path, "resources")
-    try:
-        os.mkdir(resources_path)
-    except OSError: # directory exists
-        pass
-
-    for bag, uris in sources.items():
-        bag_path = os.path.join(resources_path, bag)
-        try:
-            os.mkdir(bag_path)
-        except OSError: # directory exists
-            pass
+    for bag_name, uris in sources.items():
+        bag = Bag(bag_name)
+        target_store.put(bag)
 
         for uri in uris:
-            filepath = os.path.join(bag_path, os.path.basename(uri))
             std_error_message("retrieving %s" % uri)
-            try: # XXX: duplication of tiddlywebplugins.twimport._get_url_handle
-                try:
-                    content = urlopen(uri).read()
-                except (URLError, OSError):
-                    scheme, netloc, path, params, query, fragment = urlparse.urlparse(uri)
-                    path = quote(path)
-                    uri = urlparse.urlunparse((scheme, netloc, path, params, query, fragment))
-                    content = urlopen(uri).read()
-                try:
-                    content = unicode(content, "utf-8")
-                    write_utf8_file(filepath, content)
-                except UnicodeDecodeError: # assume binary
-                    f = open(filepath, "wb")
-                    f.write(content)
-                    f.close()
-            except (URLError, OSError):
-                if uri.endswith(".meta"):
-                    std_error_message("no meta file found for %s" % uri[:-5])
-                else:
-                    raise
-
-    tiddler_index = "tiddlers.index"
-    tiddler_paths = []
-    for base_dir, dirs, files in os.walk(resources_path):
-        bag = os.path.basename(base_dir)
-        if bag in store_contents:
-            filepaths = (os.path.join(bag, filename) for filename in files
-                if not filename.endswith(".meta") and not filename == tiddler_index)
-            tiddler_paths.extend(filepaths)
-    filepath = "/".join([resources_path, tiddler_index])
-    std_error_message("creating %s" % filepath)
-    write_utf8_file(filepath, "\n".join(tiddler_paths))
+            tiddler = url_to_tiddler(uri)
+            tiddler.bag = bag.name
+            target_store.put(tiddler)
