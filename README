@@ -1,4 +1,9 @@
-A TiddlyWeb plugin to simplify instance management for verticals.
+A `TiddlyWeb <http://tiddlyweb.com>`_ plugin to simplify instance management
+for verticals.
 
 code repository:
 http://github.com/tiddlyweb/tiddlywebplugins.instancer
+
+tiddlywebplugins.instancer is deprecated. You may wish to investigate
+`tiddlywebplugins.ibuilder <http://github.com/cdent/tiddlywebplugins.ibuilder>`_
+and `tiddlywebplugins.imaker <http://github.com/cdent/tiddlywebplugins.imaker>`_.
